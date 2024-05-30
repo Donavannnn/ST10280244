@@ -15,18 +15,16 @@ import javax.swing.JOptionPane;
 
 public class LoginAndRegistration {
 
-    /**
-     * @param args the command line arguments
-     */
+    private static Map<String, String> registeredUsers = new HashMap<>();
+    private static boolean loggedIn = false;
+    private static String currentUser;
+
     public static void main(String[] args) {
-        
-        Map<String, String> registeredUsers = new HashMap<>();
-        boolean loggedIn = false;
         while (true) {
             String option = JOptionPane.showInputDialog("Choose an option:\n1. Register\n2. Login\n3. Exit");
 
             if (option == null) {
-                break; 
+                break;
             }
 
             switch (option) {
@@ -37,7 +35,7 @@ public class LoginAndRegistration {
                         registeredUsers.put(newUsername, newPassword);
                         JOptionPane.showMessageDialog(null, "Registration successful!");
                     } else {
-                        JOptionPane.showMessageDialog(null, "Invalid username or password format was entered by the user. Please make sure:\n- The Username entered by the user is not longer than 5 characters and contains an underscore.\n- Password must have at least 8 characters, a capital letter, a number, and a special character to be successfull.");
+                        JOptionPane.showMessageDialog(null, "Invalid username or password format was entered by the user. Please make sure:\n- The Username entered by the user is not longer than 5 characters and contains an underscore.\n- Password must have at least 8 characters, a capital letter, a number, and a special character to be successful.");
                     }
                     break;
 
@@ -47,7 +45,10 @@ public class LoginAndRegistration {
 
                     if (registeredUsers.containsKey(inputUsername) && registeredUsers.get(inputUsername).equals(inputPassword)) {
                         loggedIn = true;
+                        currentUser = inputUsername;
                         JOptionPane.showMessageDialog(null, "Your Login was successful!");
+                        new KanbanApp(currentUser).setVisible(true);  
+                        return;  
                     } else {
                         JOptionPane.showMessageDialog(null, "Username or Password is Incorrect!");
                     }
@@ -61,9 +62,6 @@ public class LoginAndRegistration {
                     JOptionPane.showMessageDialog(null, "Wrong option!");
                     break;
             }
-            if (loggedIn) {
-                loggedIn = false;
-            }
         }
     }
 
@@ -74,5 +72,4 @@ public class LoginAndRegistration {
     private static boolean validatePassword(String password) {
         return password.length() >= 8 && password.matches(".*[A-Z].*") && password.matches(".*\\d.*") && password.matches(".*[!@#$%^&*()].*");
     }
-    }
-    
+}
